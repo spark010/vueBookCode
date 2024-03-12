@@ -1,0 +1,49 @@
+<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+
+<div id="app">
+  <demo1 
+    @chData1="changeData1" 
+    @chData2="changeData2" ></demo1>
+</div>
+
+<script lang="javascript">
+
+  var demo11 = {
+    template: `
+      <div>
+        传递二层：<p @click="$listeners.chdata2()">子组件</p> 
+      </div>
+      `
+  }
+
+  var demo1 = {
+    template: `
+      <div>
+        传递一层：<p @click="$emit('chdata1')">子组件</p>  <p @click="$listeners.chdata1()">子组件</p>  
+        <demo11 v-on="$listeners"></demo11>
+      </div>
+    `,
+    components:{
+      demo11
+    },
+    created () {
+      console.log(this.$listeners)
+    }
+  }
+
+  var app = new Vue({
+    el: '#app',
+    components:{
+      demo1
+    },
+    methods: {
+      changeData1: function() {
+        alert(1)
+      },
+      changeData2: function() {
+        alert(2)
+      }
+    }
+  })
+
+</script>

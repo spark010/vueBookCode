@@ -1,0 +1,55 @@
+<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+
+<div id="app">
+  {{ message }}
+  <first-banner></first-banner>
+  <second-banner></second-banner>
+</div>
+
+<script lang="javascript">
+  var Bus = new Vue({})
+
+  var first = {
+    template: `
+      <div>
+        <p @click="handleClick">firstInner组件</p>
+      </div>
+      `,
+    name: 'first',
+    methods: {
+      handleClick () {
+        Bus.$emit('fromFirstInner', '来自firstInner组件')
+      }
+    }
+  }
+
+  var second = {
+    template: `
+      <div>
+          <p>secondInner组件: {{ message }}</p>
+      </div>
+      `,
+    name: 'second',
+    data() {
+      return {
+        message: ''
+      }
+    },
+    created () {
+      Bus.$on('fromFirstInner',(msg) => {
+        this.message = msg
+      })
+    }
+  }
+
+  var app = new Vue({
+    el: '#app',
+    data: {
+      message: 'center'
+    },
+    components: {
+      "first-banner": first, 
+      "second-banner": second
+    }
+  })
+</script>

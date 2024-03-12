@@ -1,0 +1,43 @@
+<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+
+<div id="app">
+  <demo1 :val1="val1" :val2="val2"></demo1>
+</div>
+
+<script lang="javascript">
+
+  var demo11 = {
+    template: `<div>传递二层：{{val1}} {{val2}}</div>`,
+    props: ['val1','val2'],
+    // inheritAttrs: false
+  }
+
+  var demo1 = {
+    template: `
+      <div>
+        传递一层：{{val1}}
+        <demo11 v-bind="$attrs"></demo11>
+      </div>
+    `,
+    props: ['val1'],
+    inheritAttrs: false,
+    components:{
+      demo11
+    },
+    created () {
+      console.log(this.$attrs) // { boo: 'Hello Javascript!', coo: 'Hello Vue', doo: 'Last' }
+    }
+  }
+
+  var app = new Vue({
+    el: '#app',
+    components:{
+      demo1
+    },
+    data: {
+      val1: 'val1',
+      val2: 'val2'
+    }
+  })
+
+</script>
